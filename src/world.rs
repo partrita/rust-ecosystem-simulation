@@ -9,6 +9,7 @@ use crate::elements::{FoodBundle, PoisonBundle};
 use crate::SimState;
 use crate::*;
 
+/// 월드의 초기화 및 엔티티 생성을 담당하는 플러그인
 pub struct WorldPlugin;
 
 impl Plugin for WorldPlugin {
@@ -26,12 +27,14 @@ impl Plugin for WorldPlugin {
     }
 }
 
+/// 초기 Boid와 포식자 개체들을 월드에 스폰
 fn populate_boids(
     mut commands: Commands,
     handle: Res<GlobalTextureHandle>,
     boid_query: Query<(With<Boid>, Without<Predator>)>,
     predator_query: Query<With<Predator>>,
 ) {
+    // 이미 개체가 있다면 새로 생성하지 않음 (초기화 단계에서 사용)
     let remaining_boids = if boid_query.iter().len() > 0 {
         0
     } else {
@@ -51,6 +54,7 @@ fn populate_boids(
     }
 }
 
+/// 초기 먹이와 독 소모품을 월드에 스폰
 fn populate_consumables(mut commands: Commands, handle: Res<GlobalTextureHandle>) {
     let mut rng = rand::thread_rng();
 
@@ -66,6 +70,8 @@ fn populate_consumables(mut commands: Commands, handle: Res<GlobalTextureHandle>
     }
 }
 
+/// 모든 초기화가 완료되면 시뮬레이션 상태를 Simulating으로 변경
 fn start_simulation(mut next_state: ResMut<NextState<SimState>>) {
     next_state.set(SimState::Simulating);
 }
+
