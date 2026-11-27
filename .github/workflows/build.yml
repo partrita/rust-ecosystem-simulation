@@ -38,6 +38,9 @@ jobs:
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          # Rust 1.100.0 regressed objc2 builds on macOS (rust-lang/rust#166229)
+          toolchain: 1.99.0
 
       - name: Rust Cache
         uses: swatinem/rust-cache@v2
